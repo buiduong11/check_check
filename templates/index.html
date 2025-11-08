@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Checker Pro</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 Card Checker Pro</h1>
+            <p>Fast and accurate credit card validation</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card live">
+                <div class="stat-number" id="stat-live">0</div>
+                <div class="stat-label">LIVE</div>
+            </div>
+            <div class="stat-card dead">
+                <div class="stat-number" id="stat-dead">0</div>
+                <div class="stat-label">DEAD</div>
+            </div>
+            <div class="stat-card invalid">
+                <div class="stat-number" id="stat-invalid">0</div>
+                <div class="stat-label">INVALID</div>
+            </div>
+            <div class="stat-card unknown">
+                <div class="stat-number" id="stat-unknown">0</div>
+                <div class="stat-label">UNKNOWN</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="card input-section">
+                <h2>📝 Input Cards</h2>
+                <textarea id="cards-input" placeholder="Enter card list (one per line)&#10;Format: number|month|year|cvv&#10;Example: 5312600051185964|3|2027|682"></textarea>
+                
+                <div class="file-upload">
+                    <input type="file" id="file-input" accept=".txt">
+                    <label for="file-input">📁 Choose File</label>
+                    <span id="file-name"></span>
+                </div>
+                
+                <div class="format-help">
+                    <strong>Format:</strong> number|month|year|cvv<br>
+                    <strong>Example:</strong> 5312600051185964|3|2027|682
+                </div>
+                
+                <button class="btn btn-primary" id="check-btn" onclick="startCheck()">
+                    🚀 Start Checking
+                </button>
+                
+                <button class="btn btn-success" id="export-btn" onclick="exportLiveCards()" disabled>
+                    💾 Export LIVE Cards
+                </button>
+            </div>
+            
+            <div class="card results-section">
+                <h2>📊 Results</h2>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Sample Credit Card List
+# Format: card_number|exp_month|exp_year|cvv
+# hoặc: card_number|exp_month/exp_year|cvv
+#
+# Ví dụ:
+# 5312600051185964|3|2027|682
+# 4532015112830366|12/2025|123
+#
+# Thẻ mẫu (test cards - không phải thẻ thật):
+
+5312600051185964|3|2027|682
+4532015112830366|12|2025|123
+4916338506082832|6|2026|456
+5425233430109903|9|2027|789
