@@ -370,7 +370,7 @@ class CardCheckerPro:
                         # Fill Address
                         address_input = self.driver.find_element("css selector", "input[name*='address1'], input[id*='address1']")
                         address_input.clear()
-                        address_input.send_keys("350 5th Ave")
+                        address_input.send_keys("123 W 18th St")
                         
                         # Fill City
                         city_input = self.driver.find_element("css selector", "input[name*='city'], input[id*='city']")
@@ -388,7 +388,7 @@ class CardCheckerPro:
                         # Fill Zip Code
                         zip_input = self.driver.find_element("css selector", "input[name*='postal'], input[id*='postal'], input[name*='zip']")
                         zip_input.clear()
-                        zip_input.send_keys("10118")
+                        zip_input.send_keys("10001")
                         
                         # Fill Phone
                         phone_input = self.driver.find_element("css selector", "input[name*='phone'], input[id*='phone']")

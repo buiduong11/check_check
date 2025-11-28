@@ -9,6 +9,30 @@ let stats = {
 // Store LIVE cards for export
 let liveCards = [];
 
+// Toggle mode selector visibility based on site
+document.getElementById('site-select').addEventListener('change', function() {
+    const site = this.value;
+    const modeContainer = document.getElementById('mode-selector-container');
+    
+    if (site === 'chewy') {
+        modeContainer.style.display = 'block';
+    } else {
+        modeContainer.style.display = 'none';
+    }
+});
+
+// Toggle num-browsers input based on mode
+document.getElementById('mode-select').addEventListener('change', function() {
+    const mode = this.value;
+    const numBrowsersContainer = document.getElementById('num-browsers-container');
+    
+    if (mode === 'multi') {
+        numBrowsersContainer.style.display = 'block';
+    } else {
+        numBrowsersContainer.style.display = 'none';
+    }
+});
+
 // File upload handler
 document.getElementById('file-input').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -40,6 +64,9 @@ document.getElementById('file-input').addEventListener('change', function(e) {
 // Start checking
 function startCheck() {
     const cardsInput = document.getElementById('cards-input').value.trim();
+    const site = document.getElementById('site-select').value;
+    const mode = document.getElementById('mode-select').value;
+    const numBrowsers = parseInt(document.getElementById('num-browsers').value) || 5;
     
     if (!cardsInput) {
         alert('Please enter card list!');
@@ -58,7 +85,7 @@ function startCheck() {
     const btn = document.getElementById('check-btn');
     const exportBtn = document.getElementById('export-btn');
     btn.disabled = true;
-    btn.textContent = '⏳ Checking...';
+    btn.textContent = mode === 'multi' ? `⏳ Checking with ${numBrowsers} browsers...` : '⏳ Checking...';
     exportBtn.disabled = true;
     
     // Send request
@@ -67,7 +94,12 @@ function startCheck() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ cards: cardsInput })
+        body: JSON.stringify({ 
+            cards: cardsInput,
+            site: site,
+            mode: mode,
+            num_browsers: numBrowsers
+        })
     })
     .then(response => response.json())
     .then(data => {
@@ -138,7 +170,8 @@ function addResult(data) {
     const resultsDiv = document.getElementById('results');
     
     const resultItem = document.createElement('div');
-    resultItem.className = `result-item ${data.status.toLowerCase()}`;
+    const statusClass = data.status.toLowerCase();
+    resultItem.className = `result-item ${statusClass}`;
     
     resultItem.innerHTML = `
         <div class="result-card">${data.card}</div>
@@ -147,16 +180,27 @@ function addResult(data) {
     
     resultsDiv.insertBefore(resultItem, resultsDiv.firstChild);
     
+    // Map APPROVED → LIVE, DECLINED → DEAD for stats
+    let statKey = statusClass;
+    if (statusClass === 'approved') {
+        statKey = 'live';
+    } else if (statusClass === 'declined') {
+        statKey = 'dead';
+    }
+    
     // Update stats
-    const status = data.status.toLowerCase();
-    if (stats.hasOwnProperty(status)) {
-        stats[status]++;
+    if (stats.hasOwnProperty(statKey)) {
+        stats[statKey]++;
         updateStats();
     }
     
     // Store LIVE cards (lưu format gốc user nhập)
-    if (status === 'live') {
+    if (statusClass === 'approved' || statusClass === 'live') {
         liveCards.push(data.card_original || data.card);
+        
+        // Enable export button
+        const exportBtn = document.getElementById('export-btn');
+        exportBtn.disabled = false;
     }
 }
 

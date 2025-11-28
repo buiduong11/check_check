@@ -35,6 +35,28 @@
         <div class="main-content">
             <div class="card input-section">
                 <h2>📝 Input Cards</h2>
+                
+                <div class="site-selector">
+                    <label for="site-select">🌐 Select Site:</label>
+                    <select id="site-select">
+                        <option value="chewy" selected>Chewy.com</option>
+                        <option value="pipesandcigars">PipesAndCigars.com</option>
+                    </select>
+                </div>
+                
+                <div class="mode-selector" id="mode-selector-container" style="margin-top: 10px;">
+                    <label for="mode-select">⚡ Mode:</label>
+                    <select id="mode-select">
+                        <option value="single">Single Browser</option>
+                        <option value="multi" selected>Multi-Browser (5x faster)</option>
+                    </select>
+                    
+                    <div id="num-browsers-container" style="margin-top: 10px; display: block;">
+                        <label for="num-browsers">🖥️ Number of Browsers:</label>
+                        <input type="number" id="num-browsers" min="1" max="10" value="5" style="width: 60px; padding: 5px;">
+                    </div>
+                </div>
+                
                 <textarea id="cards-input" placeholder="Enter card list (one per line)&#10;Format: number|month|year|cvv&#10;Example: 5312600051185964|3|2027|682"></textarea>
                 
                 <div class="file-upload">
