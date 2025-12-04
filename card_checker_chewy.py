@@ -228,19 +228,55 @@ class CardCheckerChewy:
             return False
     
     def parse_card(self, card_line: str) -> Optional[Dict]:
-        """Parse card từ format: number|month|year|cvv"""
+        """
+        Parse card từ 2 formats:
+        - Format 1: number|month|year|cvv|...
+        - Format 2: number|MM/YY|cvv|...
+        """
         try:
             parts = card_line.strip().split('|')
-            if len(parts) < 4:
+            if len(parts) < 3:
                 return None
             
+            card_number = parts[0].strip()
+            
+            # Check if parts[1] contains "/" (Format 2: MM/YY)
+            if '/' in parts[1]:
+                # Format 2: number|MM/YY|cvv|...
+                date_parts = parts[1].strip().split('/')
+                if len(date_parts) != 2:
+                    return None
+                
+                exp_month = date_parts[0].strip().zfill(2)
+                exp_year = date_parts[1].strip()
+                
+                # Convert YY to YYYY if needed
+                if len(exp_year) == 2:
+                    exp_year = '20' + exp_year
+                
+                cvv = parts[2].strip() if len(parts) > 2 else ''
+                
+                print(f"[DEBUG] Parsed Format 2 (MM/YY): {card_number}|{exp_month}|{exp_year}|{cvv}")
+                
+            else:
+                # Format 1: number|month|year|cvv|...
+                if len(parts) < 4:
+                    return None
+                
+                exp_month = parts[1].strip().zfill(2)
+                exp_year = parts[2].strip()
+                cvv = parts[3].strip()
+                
+                print(f"[DEBUG] Parsed Format 1 (standard): {card_number}|{exp_month}|{exp_year}|{cvv}")
+            
             return {
-                'number': parts[0].strip(),
-                'exp_month': parts[1].strip().zfill(2),
-                'exp_year': parts[2].strip(),
-                'cvv': parts[3].strip()
+                'number': card_number,
+                'exp_month': exp_month,
+                'exp_year': exp_year,
+                'cvv': cvv
             }
-        except:
+        except Exception as e:
+            print(f"[!] Parse error: {e}")
             return None
     
     def check_card(self, card_line: str) -> Tuple[str, str, str]:
